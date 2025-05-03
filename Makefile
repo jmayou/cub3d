@@ -2,24 +2,29 @@ NAME = cub3d
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror 
-
-SRC =  main.cpp 
- 
-OBJ = $(SRC:.cpp=.o)
+CFLAGS = -Wall -Wextra -Werror
 
 
-all : $(NAME)
+SRC = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c utils.c 
 
-$(NAME) : $(OBJ) header.h
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+OBJ = $(SRC:.c=.o)
 
-clean :
+FT_PRINTF_DIR = ft_printf
+
+all: $(NAME)
+
+$(NAME): $(OBJ) header.h
+	@make -C $(FT_PRINTF_DIR)    
+	$(CC) $(CFLAGS) $(OBJ) $(FT_PRINTF_DIR)/libftprintf.a -o $(NAME)
+
+clean:
+	@make -C $(FT_PRINTF_DIR) clean
 	rm -rf $(OBJ)
 
-fclean : clean 
-	rm -rf  $(NAME)
+fclean: clean
+	@make -C $(FT_PRINTF_DIR) fclean
+	rm -rf $(NAME)
 
-re : fclean all 
+re: fclean all
 
-.PHONY : all clean fclean re
+.PHONY: all clean fclean re
