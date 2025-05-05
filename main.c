@@ -6,7 +6,7 @@
 /*   By: fel-aziz <fel-aziz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 09:14:17 by fel-aziz          #+#    #+#             */
-/*   Updated: 2025/05/05 12:45:31 by fel-aziz         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:04:09 by fel-aziz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,29 +52,40 @@ void process_map(t_data *data)
 	{
 		convert_tabs_to_spaces(line);
 		line = ft_strtrim(line,"\n");
-		if(check_is_empty(line) == 0)
+		if(check_is_empty(line) == 0 )
 		{
 			ft_printf("the line is empty \n");
 			player++;
-			break;
+			// break;
+			exit(9);
 		}
 		else if(invalid_char(line) == 1)
 		{
 			player++;
 			ft_printf("erorr\nMap contains invalid characters or double player\n");
-			break;
+			// break;
+			exit(9);
 		}
-		if(has_double_player(line) == 1)
+
+		int count = has_double_player(line);
+		if (count > 0)
 		{
-			if(player == 2)
-			{
-				ft_printf("error\nthe player is double\n");
-				break;
-			}
-			player = 2;
+    		player += count;
+    		if (player > 1)
+    		{
+       	 		ft_printf("Error\nThe player is double\n");
+        		// break;
+				exit(9);
+    		}
 		}
-		maps = add_line_to_map(maps, line, n);
-		ft_print_map(maps);
+		if(n == 0)
+		{
+			maps = add_line_to_map(maps,ft_strtrim(data->first_line,"\n"),n);
+		}
+		else
+		{
+			maps = add_line_to_map(maps, line, n);
+		}
 		line = get_next_line(data->cub_fd);
 		n++;
 	}
@@ -83,10 +94,35 @@ void process_map(t_data *data)
 		ft_printf("Error\nNo player found in the map\n");
 		exit(1);
 	}
-
+	if(is_map_only_walls(maps, n) == 1)
+	{
+		ft_printf("error\n Map contains only walls, no playable area or player position\n");
+		exit(9);
+	}
+	data->ma = maps;
+	
 
 }
+void skip_empty_line(t_data *data)
+{
+	char *line;
+	line = get_next_line(data->cub_fd);
+	while(line != NULL && check_is_empty(line) == 0)
+	{
+		line = get_next_line(data->cub_fd);
+	}
+	data->first_line = line;
+}
 
+int check_element(t_data *data)
+{
+
+	if(data->no_set == false || data->so_set == false || data->we_set == false || data->ea_set == false || data->f_set == false  || data->c_set == false ) 
+	{
+		return(1);
+	}
+	return(0);
+}
 int	main(int ac, char *av[])
 {
 	
@@ -106,11 +142,18 @@ int	main(int ac, char *av[])
 		perror("error\n");
 		return (1);
 	}
-	// process_element(data);
-	// make sure if the line end whit space is valde 
-	// skip all the lines empty 
-
+	process_element(data);
+	if(check_element(data) == 1)
+	{
+		ft_printf("error\n one fo elemet not exist \n");
+		exit(9);
+	}
+	skip_empty_line(data);
 	process_map(data);
+	// ft_print_map(data->ma);
+	if (check_spaces_near_open_tiles(data->ma) == 1)
+		return(1);
+	
 	return (0);
 }
 

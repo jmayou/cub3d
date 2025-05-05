@@ -4,6 +4,7 @@
 #include "ft_printf/ft_printf.h"
 #include <fcntl.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 
 typedef struct s_identifiers
@@ -18,10 +19,10 @@ typedef struct s_identifiers
 typedef struct s_data
 {
 	t_identifiers *ident ;
-	int N_set;
-	int S_set;
-	int E_set;
-	int W_set;
+	// int N_set;
+	// int S_set;
+	// int E_set;
+	// int W_set;
 	bool no_set;
     bool so_set;
     bool we_set;
@@ -30,6 +31,8 @@ typedef struct s_data
     bool c_set;
 	int cub_fd;
 	int texture_fd;
+	char **ma;
+	char *first_line ;
 
 }t_data;
 
@@ -61,5 +64,7 @@ void	check_file_extension(char *av);
 int valid_NO(char **line,t_data *data);
 int invalid_char( char *line);
 int has_double_player(const char *line);
+int is_map_only_walls(char **maps, int n);
+int	check_spaces_near_open_tiles(char **map);
 
 #endif 

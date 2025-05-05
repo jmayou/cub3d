@@ -6,7 +6,7 @@
 /*   By: fel-aziz <fel-aziz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 08:57:41 by fel-aziz          #+#    #+#             */
-/*   Updated: 2025/05/05 10:34:54 by fel-aziz         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:29:08 by fel-aziz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,18 @@ void process_element(t_data *data)
 	char	*line;
 	char **str; 
 	int count = 0;
+	//  if a element not found 
 	line = get_next_line(data->cub_fd);  
 	while (line != NULL)
 	{
 		convert_tabs_to_spaces(line);
 		if(check_is_empty(line) == 1 )
 		{
-			count++; 
-			if(count > 6 )
-			{
-				break;
-			}
+			 count++;
+			
 			str = ft_split(line, ' ');
 			if(  (ft_len(str) == 3 && ft_strncmp("\n",str[2],1) == 0 ) || ft_len(str) == 2)
 			{
-				
 				is_identifier_valid(str, data);
 			}
 			else
@@ -40,9 +37,12 @@ void process_element(t_data *data)
 				exit(1);
 			}
 		}
+		if(count == 6 )
+		{	
+			break;
+		}
 		line = get_next_line(data->cub_fd);
-	}
-	
+	}	
 }
 void init_data(t_data **data )
 {
@@ -59,10 +59,12 @@ void init_data(t_data **data )
     (*data)->c_set = false;
 	(*data)->ident = NULL;
 
-	(*data)->N_set = 0;
-	(*data)->S_set = 0;
-	(*data)->E_set = 0;
-	(*data)->W_set = 0;
+	// (*data)->N_set = 0;
+	// (*data)->S_set = 0;
+	// (*data)->E_set = 0;
+	// (*data)->W_set = 0;
+
+	(*data)->ma = NULL;
 }
 
 void convert_tabs_to_spaces(char *line)
@@ -97,10 +99,10 @@ void is_identifier_valid(char **line , t_data *data)
 	}
 	else if(ft_strncmp(line[0],"F",ft_strlen(line[0])) == 0 && valid_F(line,data) == 0)
 	{
-	
 	}
 	else if(ft_strncmp(line[0],"C",ft_strlen(line[0])) == 0 && valid_C(line, data) == 0)
 	{
+		
 
 	}
 	else
@@ -117,6 +119,7 @@ int valid_C(char **line,t_data *data)
 {
 	
 	int *s;
+	
 	if(data->c_set == true)
 	{
 		ft_printf("error\nthe line is duplicate\n");
