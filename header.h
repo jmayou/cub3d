@@ -18,6 +18,10 @@ typedef struct s_identifiers
 typedef struct s_data
 {
 	t_identifiers *ident ;
+	int N_set;
+	int S_set;
+	int E_set;
+	int W_set;
 	bool no_set;
     bool so_set;
     bool we_set;
@@ -44,5 +48,18 @@ t_identifiers	*ft_new_node(char *i, char *p, int *C,int *F);
 // parsing 
 
 void process_element(t_data *data);
+void init_data(t_data **data );
+void convert_tabs_to_spaces(char *line);
+void is_identifier_valid(char **line , t_data *data);
+int valid_C(char **line,t_data *data);
+int valid_F(char **line,t_data *data);
+int *ft_convert(char **rgb);
+int valid_EA(char **line,t_data *data);
+int valid_WE(char **line,t_data *data);
+int valid_SO(char **line,t_data *data);
+void	check_file_extension(char *av);
+int valid_NO(char **line,t_data *data);
+int invalid_char( char *line);
+int has_double_player(const char *line);
 
 #endif 
