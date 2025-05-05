@@ -6,7 +6,7 @@
 /*   By: fel-aziz <fel-aziz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:08:53 by fel-aziz          #+#    #+#             */
-/*   Updated: 2025/05/03 19:12:08 by fel-aziz         ###   ########.fr       */
+/*   Updated: 2025/05/04 09:51:23 by fel-aziz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,4 +183,46 @@ int  ft_len(char **str)
 		i++;
 	}
 	return(i);
+}
+
+
+static int	ft_char(char c, const char *set)
+{
+	int	i;
+
+	i = 0;
+	while (set[i] != '\0')
+	{
+		if (set[i] == c)
+		{
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_strtrim(char  *s1, char  *set)
+{
+	char	*p;
+	size_t	j;
+	size_t	k;
+	size_t	i;
+
+	i = 0;
+	j = ft_strlen(s1);
+	k = 0;
+	if (s1 == NULL || set == NULL)
+		return (NULL);
+	while (ft_char(s1[i], set) == 1)
+		i++;
+	while (j > i && ft_char(s1[(j - 1)], set) == 1)
+		j--;
+	p = malloc((j - i) * sizeof(char) + 1);
+	if (p == NULL)
+		return (NULL);
+	while (i < j)
+		p[k++] = s1[i++];
+	p[k] = '\0';
+	return (p);
 }
