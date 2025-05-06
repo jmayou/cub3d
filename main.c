@@ -6,7 +6,7 @@
 /*   By: fel-aziz <fel-aziz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 09:14:17 by fel-aziz          #+#    #+#             */
-/*   Updated: 2025/05/05 20:04:09 by fel-aziz         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:37:24 by fel-aziz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,24 +123,20 @@ int check_element(t_data *data)
 	}
 	return(0);
 }
-int	main(int ac, char *av[])
+
+void parsing(t_data *data , int ac ,char *av[])
 {
-	
-	t_data *data = NULL;
-	init_data(&data);
-	if(data == NULL)
-		return(1);
 	if (ac != 2)
 	{
 		ft_printf("Error\nThis program accepts exactly two arguments.\n");
-		return (1);
+		exit(1);
 	}
 	check_file_extension(av[1] );
 	data->cub_fd = open(av[1], O_RDONLY);
 	if (data->cub_fd < 0)
 	{
 		perror("error\n");
-		return (1);
+		exit(9);
 	}
 	process_element(data);
 	if(check_element(data) == 1)
@@ -152,7 +148,17 @@ int	main(int ac, char *av[])
 	process_map(data);
 	// ft_print_map(data->ma);
 	if (check_spaces_near_open_tiles(data->ma) == 1)
-		return(1);
+		exit(1);
+}
+int	main(int ac, char *av[])
+{
+	
+	t_data *data = NULL;
+	init_data(&data);
+	if(data == NULL)
+		exit(1);
+	parsing(data ,ac ,av);
+	
 	
 	return (0);
 }
